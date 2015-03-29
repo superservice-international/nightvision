@@ -1,6 +1,7 @@
 import picamera
 import time
 import datetime
+import os
 
 
 def take_picture():
@@ -8,6 +9,8 @@ def take_picture():
     now_str = now.strftime('%Y-%m-%d-%H:%M:%S')
     file_name = now_str + '.jpg'
     with picamera.PiCamera() as camera:
+        path = os.getcwd()
+        os.chdir(path)
         camera.resolution = (1024, 768)
         time.sleep(2)
         camera.capture(file_name)
