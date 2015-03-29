@@ -11,6 +11,7 @@ def take_picture():
     with picamera.PiCamera() as camera:
         path = os.getcwd()
         os.chdir(path)
+        print path
         camera.resolution = (1024, 768)
         time.sleep(2)
         camera.capture(file_name)
