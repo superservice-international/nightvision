@@ -24,7 +24,11 @@ def post_picture(file_name):
     user = os.environ["PIC_USER"]
     pw = os.environ["PIC_USER_PW"]
     print ("now posting " + file_name)
-    post = requests.post(url=host, auth=HTTPBasicAuth(user, pw), files={'photo': open(file_name, 'rb')})
+    post = requests.post(
+            url=host,
+            auth=HTTPBasicAuth(user, pw),
+            files={'photo': open(file_name, 'rb')}
+        )
     if post.status_code == 201:
         return True
     else:
