@@ -2,6 +2,8 @@ import picamera
 import time
 import datetime
 import os
+import requests
+from requests.auth import HTTPBasicAuth
 
 
 def take_picture():
@@ -18,16 +20,24 @@ def take_picture():
 
 
 def post_picture(file_name):
-
+    host = 'http://192.168.178.32:8000/pictures/'
+    user = os.environ["PIC_USER"]
+    pw = os.environ["PIC_USER_PW"]
     print ("now posting " + file_name)
+    post = requests.post(url=host, auth=HTTPBasicAuth(user, pw), files={'photo': open(file_name, 'rb')})
+    if post.status_code == 201:
+        return True
+    else:
+        return False
 
 
 def delete_picture(file_name):
-
     print ("now deleting " + file_name)
+    os.remove(file_name)
 
 
 if __name__ == "__main__":
     picture = take_picture()
-    post_picture(picture)
-    delete_picture(picture)
+    posted = post_picture(picture)
+    if posted:
+        delete_picture(picture)
