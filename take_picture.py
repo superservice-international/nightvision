@@ -16,12 +16,12 @@ def take_picture():
 
 def post_picture(file_name):
 
-    print "now posting " + file_name
+    print ("now posting " + file_name)
 
 
 def delete_picture(file_name):
 
-    print "now deleting " + file_name
+    print ("now deleting " + file_name)
 
 
 if __name__ == "__main__":
