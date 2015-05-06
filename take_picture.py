@@ -20,7 +20,7 @@ def take_picture():
 
 
 def post_picture(file_name):
-    host = 'http://192.168.178.32:8000/pictures/'
+    host = 'http://192.168.178.32:8000/-/pictures/'
     user = os.environ["PIC_USER"]
     pw = os.environ["PIC_USER_PW"]
     print ("now posting " + file_name)
