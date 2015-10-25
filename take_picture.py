@@ -26,11 +26,18 @@ def reduce_filezise(file_name):
 
 
 def post_picture(file_name):
-    host = 'http://kamera.reimers-sportpferde.de/-/pictures/'
-    user = "creimers"
-    pw = "1lb2es!M"
+    # host = 'http://kamera.reimers-sportpferde.de/-/pictures/'
+    # user = "creimers"
+    # pw = "1lb2es!M"
+    host = 'http://192.168.178.32:8000/-/pictures/'
+    user = os.environ["PIC_USER"]
+    pw = os.environ["PIC_USER_PW"]
     print ("now posting " + file_name)
-    post = requests.post(url=host, auth=HTTPBasicAuth(user, pw), files={'photo': open(file_name, 'rb')})
+    post = requests.post(
+            url=host,
+            auth=HTTPBasicAuth(user, pw),
+            files={'photo': open(file_name, 'rb')}
+        )
     if post.status_code == 201:
         return True
 
