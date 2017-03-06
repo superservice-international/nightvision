@@ -42,7 +42,7 @@ def post_picture(file_name):
             auth=TokenAuth(),
             files={'image': open(file_name, 'rb')}
         )
-    return post.json()['data']['postPicture']['success']
+    return post.json()['data']['postPicture'].get('success')
 
 
 def delete_picture(file_name):
