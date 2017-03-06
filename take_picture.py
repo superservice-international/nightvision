@@ -3,7 +3,6 @@ import time
 import datetime
 import os
 import requests
-from requests.auth import HTTPBasicAuth
 from PIL import Image
 
 
@@ -16,7 +15,7 @@ def take_picture():
         camera.resolution = (1024, 768)
         time.sleep(2)
         camera.capture(file_name)
-        print (file_name + " taken")
+        print(file_name + " taken")
         return file_name
 
 
@@ -25,25 +24,29 @@ def reduce_filezise(file_name):
     im.save(file_name, 'JPEG', quality=90)
 
 
+class TokenAuth(requests.auth.AuthBase):
+    def __call__(self, r):
+        token = 'Token %s' % os.environ.get('API_TOKEN')
+        r.headers['Authorization'] = token
+        return r
+
+
 def post_picture(file_name):
-    # host = 'http://kamera.reimers-sportpferde.de/-/pictures/'
-    # user = "creimers"
-    # pw = "1lb2es!M"
-    host = 'http://192.168.178.32:8000/-/pictures/'
-    user = os.environ["PIC_USER"]
-    pw = os.environ["PIC_USER_PW"]
-    print ("now posting " + file_name)
+    host = os.environ.get('API_URL')
+
+    query = "?query=mutation{postPicture(input: {}){success errors clientMutationId}}"
+
+    print("now posting " + file_name)
     post = requests.post(
-            url=host,
-            auth=HTTPBasicAuth(user, pw),
-            files={'photo': open(file_name, 'rb')}
+            url=host + query,
+            auth=TokenAuth(),
+            files={'image': open(file_name, 'rb')}
         )
-    if post.status_code == 201:
-        return True
+    return post.json()['data']['postPicture']['success']
 
 
 def delete_picture(file_name):
-    print ("now deleting " + file_name)
+    print("now deleting " + file_name)
     os.remove(file_name)
 
 
@@ -57,6 +60,7 @@ def post_remaining():
 
 
 if __name__ == "__main__":
+    #  picture = '/Users/creimers/Downloads/2017-03-06_17-19-55.jpg'
     picture = take_picture()
     reduce_filezise(picture)
     posted = post_picture(picture)
