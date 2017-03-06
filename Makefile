@@ -6,7 +6,7 @@ PIP := env/bin/pip
 all: install
 
 $(PYTHON):
-	virtualenv env
+	virtualenv -p python3.5 env
 
 $(PIP): $(PYTHON)
 
