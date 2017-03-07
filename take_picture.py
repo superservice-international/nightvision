@@ -47,6 +47,17 @@ def post_picture(file_name):
         return result.get('success', False)
 
 
+def post_picture_slack(file_name):
+    token = os.environ.get('SLACK_TOKEN')
+    with open(file_name, 'rb') as pic:
+        response = requests.post(
+            url="https://slack.com/api/files.upload",
+            data={'token': token, 'channels': 'horsebot'},
+            files={'file': pic}
+        )
+    return response.json().get('ok', False)
+
+
 def delete_picture(file_name):
     print("now deleting " + file_name)
     os.remove(file_name)
@@ -56,16 +67,15 @@ def post_remaining():
     path = os.path.dirname(os.path.abspath(__file__))
     for pic in os.listdir(path):
         if pic.split('.')[-1] == 'jpg':
-            post = post_picture('/'.join([path, pic]))
+            post = post_picture_slack('/'.join([path, pic]))
             if post:
                 delete_picture('/'.join([path, pic]))
 
 
 if __name__ == "__main__":
-    #  picture = '/Users/creimers/Downloads/2017-03-06_17-19-55.jpg'
     picture = take_picture()
     reduce_filezise(picture)
-    posted = post_picture(picture)
+    posted = post_picture_slack(picture)
     if posted:
         delete_picture(picture)
     post_remaining()
