@@ -1,6 +1,6 @@
 # nightvision-camera
 
-on the raspberry pi, this software rquires
+on the raspberry pi, this software requires:
 
 `sudo apt-get install python-dev`
 
